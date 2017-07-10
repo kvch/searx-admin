@@ -1,0 +1,13 @@
+app:
+    debug: True
+    port: 8889
+    secretkey: 'my-dirty-secret'
+    sqlite_path: 'sqlite:////tmp/users.db'
+
+mail:
+    server: 'smtp.localhost'
+    port: 465
+    use_ssl: True
+    user: 'mail'
+    password: 'password'
+

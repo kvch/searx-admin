@@ -1,6 +1,7 @@
 from os.path import isfile
 
 from flask import Flask, render_template
+from flask_mail import Mail
 from flask_security import Security, SQLAlchemySessionUserDatastore, login_required
 
 from config import configuration
@@ -10,8 +11,16 @@ from model import User, Role
 
 app = Flask(__name__)
 app.secret_key = configuration['app']['secretkey']
+
 app.config['SECURITY_PASSWORD_SALT'] = configuration['app']['secretkey']
 
+app.config['MAIL_SERVER'] = configuration['mail']['server']
+app.config['MAIL_PORT'] = configuration['mail']['port']
+app.config['MAIL_USE_SSL'] = configuration['mail']['use_ssl']
+app.config['MAIL_USERNAME'] = configuration['mail']['user']
+app.config['MAIL_PASSWORD'] = configuration['mail']['password']
+
+mail = Mail(app)
 user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 security = Security(app, user_datastore)
 
