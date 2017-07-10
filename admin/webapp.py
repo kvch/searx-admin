@@ -33,14 +33,40 @@ def _create_db_if_missing():
         db_session.commit()
 
 
-
-
-
 @app.route('/')
+@login_required
 def index():
-    return 'hello'
+    return render_template('index.html')
 
 
+@app.route('/instance')
+@login_required
+def instance():
+    return 'instance settings'
+
+
+@app.route('/search')
+@login_required
+def search():
+    return 'search'
+
+
+@app.route('/networking')
+@login_required
+def networking():
+    return 'networking'
+
+
+@app.route('/engines')
+@login_required
+def engines():
+    return 'engines'
+
+
+@app.route('/settings')
+@login_required
+def settings():
+    return 'settings'
 
 
 def run():

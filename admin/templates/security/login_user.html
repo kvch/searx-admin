@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+.login-card-wide.mdl-card {
+    width: 30.0rem;
+    margin: auto;
+}
+</style>
+
+<div class="login-card-wide mdl-card mdl-shadow--2dp">
+  <div class="mdl-card__title">
+      <h2 class="mdl-card__title-text">{{ _('Login') }}</h2>
+  </div>
+  <div class="mdl-card__supporting-text">
+    {% from "security/_macros.html" import render_field_with_errors, render_field %}
+    {% include "security/_messages.html" %}
+    <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
+    {{ login_user_form.hidden_tag() }}
+    {{ render_field_with_errors(login_user_form.email) }}
+    {{ render_field_with_errors(login_user_form.password) }}
+    {{ render_field_with_errors(login_user_form.remember) }}
+    {{ render_field(login_user_form.next) }}
+    {{ render_field(login_user_form.submit) }}
+    {% include "security/_menu.html" %}
+    </form>
+  </div>
+</div>
+{% endblock %}
