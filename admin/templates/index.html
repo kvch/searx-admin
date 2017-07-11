@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
+<style>
+.mdl-layout__header a {
+    color: #fff;
+}
+</style>
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
     <header class="mdl-layout__header">
         <div class="mdl-layout__header-row">
@@ -12,6 +17,11 @@
                 <div class="mdl-textfield__expandable-holder">
                     <input class="mdl-textfield__input" type="text" name="sample" id="fixed-header-drawer-exp">
                 </div>
+                <a href="{{ url_for_security('logout') }}">
+                    <label class="mdl-button mdl-js-button mdl-button--icon">
+                        <i class="material-icons">exit_to_app</i>
+                    </label>
+                </a>
             </div>
         </div>
     </header>
