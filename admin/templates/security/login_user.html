@@ -9,7 +9,6 @@
 }
 .login-error {
     font-weight: bold;
-    font-color: red;
 }
 </style>
 
@@ -22,12 +21,16 @@
     {{ login_user_form.hidden_tag() }}
     {% if login_user_form.email.errors %}
       {% for error in login_user_form.email.errors %}
-      <div class="login-error">{{ error }}</div>
+      <div class="login-error mdl-color-text--accent">
+            <label class="mdl-button mdl-button--icon"><i class="material-icons">error</i></label>{{ error }}
+      </div>
       {% endfor %}
     {% endif %}
     {% if login_user_form.password.errors %}
       {% for error in login_user_form.password.errors %}
-      <div class="login-error">{{ error }}</div>
+      <div class="login-error mdl-color-text--accent">{{ error }}
+            <label class="mdl-button mdl-button--icon"><i class="material-icons">error</i></label>{{ error }}
+      </div>
       {% endfor %}
     {% endif %}
     <div class="mdl-textfield mdl-js-textfield">
@@ -43,7 +46,7 @@
         <span class="mdl-checkbox__label">Remember Me</span>
     </label>
     <p><input id="next" name="next" type="hidden" value="/"></p>
-    <p><input class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="submit" name="submit" type="submit" value="Login"></p>
+    <p><input class="mdl-button mdl-js-button mdl-button--raised mdl-button--primary" id="submit" name="submit" type="submit" value="Login"></p>
     </form>
   </div>
 </div>
