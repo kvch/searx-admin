@@ -4,6 +4,12 @@
 .login-card-wide.mdl-card {
     width: 30.0rem;
     margin: auto;
+    margin-top: 10.0rem;
+    padding: 2.0rem;
+}
+.login-error {
+    font-weight: bold;
+    font-color: red;
 }
 </style>
 
@@ -12,16 +18,32 @@
       <h2 class="mdl-card__title-text">{{ _('Login') }}</h2>
   </div>
   <div class="mdl-card__supporting-text">
-    {% from "security/_macros.html" import render_field_with_errors, render_field %}
-    {% include "security/_messages.html" %}
     <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
     {{ login_user_form.hidden_tag() }}
-    {{ render_field_with_errors(login_user_form.email) }}
-    {{ render_field_with_errors(login_user_form.password) }}
-    {{ render_field_with_errors(login_user_form.remember) }}
-    {{ render_field(login_user_form.next) }}
-    {{ render_field(login_user_form.submit) }}
-    {% include "security/_menu.html" %}
+    {% if login_user_form.email.errors %}
+      {% for error in login_user_form.email.errors %}
+      <div class="login-error">{{ error }}</div>
+      {% endfor %}
+    {% endif %}
+    {% if login_user_form.password.errors %}
+      {% for error in login_user_form.password.errors %}
+      <div class="login-error">{{ error }}</div>
+      {% endfor %}
+    {% endif %}
+    <div class="mdl-textfield mdl-js-textfield">
+        <label class="mdl-textfield__label" for="email">Email Address</label>
+        <input class="mdl-textfield__input" id="email" name="email" type="text" value="">
+    </div>
+    <div class="mdl-textfield mdl-js-textfield">
+        <label class="mdl-textfield__label" for="password">Password</label>
+        <input class="mdl-textfield__input" id="password" name="password" type="password" value="">
+    </div>
+    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="remember">
+        <input class="mdl-checkbox__input" id="remember" name="remember" type="checkbox" value="y">
+        <span class="mdl-checkbox__label">Remember Me</span>
+    </label>
+    <p><input id="next" name="next" type="hidden" value="/"></p>
+    <p><input class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="submit" name="submit" type="submit" value="Login"></p>
     </form>
   </div>
 </div>
