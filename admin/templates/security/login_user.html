@@ -28,7 +28,7 @@
     {% endif %}
     {% if login_user_form.password.errors %}
       {% for error in login_user_form.password.errors %}
-      <div class="login-error mdl-color-text--accent">{{ error }}
+      <div class="login-error mdl-color-text--accent">
             <label class="mdl-button mdl-button--icon"><i class="material-icons">error</i></label>{{ error }}
       </div>
       {% endfor %}
