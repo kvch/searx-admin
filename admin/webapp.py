@@ -1,4 +1,5 @@
 from os.path import isfile
+import yaml
 
 from flask import Flask, render_template
 from flask_mail import Mail
@@ -24,6 +25,9 @@ mail = Mail(app)
 user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 security = Security(app, user_datastore)
 
+with open(configuration['searx']['path_to_settings']) as config_file:
+    searx_settings = yaml.load(config_file)
+
 
 @app.before_first_request
 def _create_db_if_missing():
@@ -42,7 +46,10 @@ def index():
 @app.route('/instance')
 @login_required
 def instance():
-    return 'instance settings'
+    return render_template('server.html',
+                           instance_name=searx_settings['general']['instance_name'],
+                           debug=searx_settings['general']['debug'],
+                           **searx_settings['server'])
 
 
 @app.route('/search')

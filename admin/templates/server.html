@@ -1,0 +1,13 @@
+{% extends "index.html" %}
+{% from "macros.html" import switch, text_input, numeric_input %} 
+{% block page %}
+
+{{ switch('Debug logging', 'debug', debug) }}
+{{ text_input('Instance name', 'instance_name', instance_name) }}
+{{ numeric_input('Port', 'port', port) }}
+{{ text_input('Bind address', 'bind_address', bind_address) }}
+{{ text_input('Secret key', 'secret_key', secret_key) }}
+{{ text_input('Base URL', 'base_url', base_url) }}
+{{ switch('Image proxy', 'image_proxy', image_proxy) }}
+
+{% endblock %}
