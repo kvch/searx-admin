@@ -72,10 +72,17 @@ def search():
                            **searx_settings['search'])
 
 
-@app.route('/networking')
+@app.route('/ui')
 @login_required
-def networking():
-    return 'networking'
+def user_interface():
+    locales = []
+    for key, val in searx_settings['locales'].items():
+        locales.append((key, val))
+    locales.append(('', 'Default'))
+    return render_template('ui.html',
+                           instance_name=searx_settings['general']['instance_name'],
+                           locales=locales,
+                           **searx_settings['ui'])
 
 
 @app.route('/engines')
