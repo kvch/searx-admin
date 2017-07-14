@@ -50,7 +50,7 @@
 		<div class="mdl-selectfield">
 			<select class="browser-default">
 				{% for value, name in possible_values %}
-				<option value="{{ value }}">{{ name }}</option>
+                <option value="{{ value }}" {% if current == value %}selected="selected"{% endif %}>{{ name }}</option>
 				{% endfor %}
 			</select>
 		</div>
