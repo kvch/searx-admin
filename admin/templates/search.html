@@ -1,0 +1,8 @@
+{% extends "index.html" %}
+{% from "macros.html" import dropdown %} 
+{% block page %}
+
+{{ dropdown('Safe search', 'safe_search', safe_search_options, safe_search) }}
+{{ dropdown('Autocomplete', 'autocomplete', autocomplete_options, autocomplete) }}
+{{ dropdown('Language', 'language', [], language) }}
+{% endblock %}
