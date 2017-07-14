@@ -40,3 +40,20 @@
     </div>
 </div>
 {% endmacro %}
+
+{% macro dropdown(label, id, possible_values, current) -%}
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--4-col mdl-cell--middle">
+        {{ label }}:
+    </div>
+    <div class="mdl-cell mdl-cell--8-col mdl-cell--middle">
+		<div class="mdl-selectfield">
+			<select class="browser-default">
+				{% for value, name in possible_values %}
+				<option value="{{ value }}">{{ name }}</option>
+				{% endfor %}
+			</select>
+		</div>
+    </div>
+</div>
+{% endmacro %}

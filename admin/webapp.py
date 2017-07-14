@@ -55,7 +55,21 @@ def instance():
 @app.route('/search')
 @login_required
 def search():
-    return 'search'
+    # TODO better option retrieval
+    safe_search_options = [('0', 'None'),
+                           ('1', 'Moderate'),
+                           ('2', 'Strict')]
+    autocomplete_options = [('', 'None'),
+                            ('wikipedia', 'Wikipedia'),
+                            ('startpage', 'StartPage'),
+                            ('duckduckgo', 'DuckDuckGo'),
+                            ('google', 'Google'),
+                            ('dbpedia', 'DBPedia')]
+    return render_template('search.html',
+                           instance_name=searx_settings['general']['instance_name'],
+                           safe_search_options=safe_search_options,
+                           autocomplete_options=autocomplete_options,
+                           **searx_settings['search'])
 
 
 @app.route('/networking')
