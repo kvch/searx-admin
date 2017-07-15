@@ -1,10 +1,14 @@
 {% extends "index.html" %}
-{% from "macros.html" import text_input, dropdown %} 
+{% from "macros.html" import text_input, dropdown, submit %}
 {% block page %}
 
-{{ text_input('Static path', 'static_path', static_path) }}
-{{ text_input('Templates path', 'templates_path', templates_path) }}
-{{ dropdown('Default template', 'default_theme', themes, default_theme) }}
-{{ dropdown('Default locale', 'default_locale', locales, default_locale) }}
+<form method="POST" action="{{ url_for('save') }}" id="ui">
+    <input type="hidden" name="section" value="ui">
+    {{ text_input('Static path', 'static_path', static_path) }}
+    {{ text_input('Templates path', 'templates_path', templates_path) }}
+    {{ dropdown('Default template', 'default_theme', themes, default_theme) }}
+    {{ dropdown('Default locale', 'default_locale', locales, default_locale) }}
+	{{ submit() }}
+</form>
 
 {% endblock %}

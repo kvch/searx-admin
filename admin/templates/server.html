@@ -1,13 +1,18 @@
 {% extends "index.html" %}
-{% from "macros.html" import switch, text_input, numeric_input %} 
+{% from "macros.html" import switch, text_input, numeric_input, dropdown, submit %}
 {% block page %}
 
-{{ switch('Debug logging', 'debug', debug) }}
-{{ text_input('Instance name', 'instance_name', instance_name) }}
-{{ numeric_input('Port', 'port', port) }}
-{{ text_input('Bind address', 'bind_address', bind_address) }}
-{{ text_input('Secret key', 'secret_key', secret_key) }}
-{{ text_input('Base URL', 'base_url', base_url) }}
-{{ switch('Image proxy', 'image_proxy', image_proxy) }}
+<form method="POST" action="{{ url_for('save') }}" id="server">
+    <input type="hidden" name="section" value="server">
+    {{ switch('Debug logging', 'debug', debug) }}
+    {{ text_input('Instance name', 'instance_name', instance_name) }}
+    {{ numeric_input('Port', 'port', port) }}
+    {{ text_input('Bind address', 'bind_address', bind_address) }}
+    {{ text_input('Secret key', 'secret_key', secret_key) }}
+    {{ text_input('Base URL', 'base_url', base_url) }}
+    {{ switch('Image proxy', 'image_proxy', image_proxy) }}
+    {{ dropdown('HTTP protocol version', 'http_protocol_version', [('1.0', '1.0'), ('1.1', '1.1')], http_protocol_version) }}
+	{{ submit() }}
+</form>
 
 {% endblock %}

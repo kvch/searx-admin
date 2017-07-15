@@ -1,8 +1,12 @@
 {% extends "index.html" %}
-{% from "macros.html" import dropdown %} 
+{% from "macros.html" import dropdown, submit %}
 {% block page %}
 
-{{ dropdown('Safe search', 'safe_search', safe_search_options, safe_search) }}
-{{ dropdown('Autocomplete', 'autocomplete', autocomplete_options, autocomplete) }}
-{{ dropdown('Language', 'language', [], language) }}
+<form method="POST" action="{{ url_for('save') }}" id="search">
+    <input type="hidden" name="section" value="search">
+    {{ dropdown('Safe search', 'safe_search', safe_search_options, safe_search) }}
+    {{ dropdown('Autocomplete', 'autocomplete', autocomplete_options, autocomplete) }}
+    {{ dropdown('Language', 'language', [], language) }}
+	{{ submit() }}
+</form>
 {% endblock %}
