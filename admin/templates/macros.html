@@ -5,7 +5,7 @@
     </div>
     <div class="mdl-cell mdl-cell--8-col">
         <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="{{ id }}">
-            <input type="checkbox" id="{{ id }}" class="mdl-switch__input" {% if on %}checked{% endif %}>
+            <input type="checkbox" id="{{ id }}" name="{{ id }}" class="mdl-switch__input" {% if on %}checked{% endif %}>
           <span class="mdl-switch__label"></span>
         </label>
     </div>
@@ -19,7 +19,7 @@
     </div>
     <div class="mdl-cell mdl-cell--8-col mdl-cell--middle">
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-              <input class="mdl-textfield__input" type="text" id="{{ id }}" placeholder="{{ value }}">
+              <input class="mdl-textfield__input" type="text" name="{{ id }}" value="{{ value }}">
               <label class="mdl-textfield__label" for="{{ id }}"></label>
         </div>
     </div>
@@ -33,7 +33,7 @@
     </div>
     <div class="mdl-cell mdl-cell--8-col mdl-cell--middle">
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="{{ id }}" placeholder="{{ value }}">
+            <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" name="{{ id }}" value="{{ value }}">
             <label class="mdl-textfield__label" for="{{ id }}"></label>
             <span class="mdl-textfield__error">Input is not a number!</span>
         </div>
@@ -48,7 +48,7 @@
     </div>
     <div class="mdl-cell mdl-cell--8-col mdl-cell--middle">
 		<div class="mdl-selectfield">
-			<select class="browser-default">
+            <select class="browser-default" name="{{ id }}">
 				{% for value, name in possible_values %}
                 <option value="{{ value }}" {% if current == value %}selected="selected"{% endif %}>{{ name }}</option>
 				{% endfor %}
@@ -56,4 +56,8 @@
 		</div>
     </div>
 </div>
+{% endmacro %}
+
+{% macro submit() -%}
+<input type="submit" value="Submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
 {% endmacro %}
