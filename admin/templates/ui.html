@@ -6,7 +6,7 @@
     <input type="hidden" name="section" value="ui">
     {{ text_input('Static path', 'static_path', static_path) }}
     {{ text_input('Templates path', 'templates_path', templates_path) }}
-    {{ dropdown('Default template', 'default_theme', themes, default_theme) }}
+    {{ dropdown('Default template', 'default_theme', available_themes, default_theme) }}
     {{ dropdown('Default locale', 'default_locale', locales, default_locale) }}
 	{{ submit() }}
 </form>

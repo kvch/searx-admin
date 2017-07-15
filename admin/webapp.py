@@ -1,3 +1,4 @@
+from os import listdir
 from os.path import isfile
 import yaml
 
@@ -72,16 +73,34 @@ def search():
                            **searx_settings['search'])
 
 
-@app.route('/ui')
-@login_required
-def ui():
+def _setup_locales_to_display():
     locales = []
     for key, val in searx_settings['locales'].items():
         locales.append((key, val))
     locales.append(('', 'Default'))
+    return locales
+
+
+def _get_available_themes():
+    templates_path = searx_settings['ui']['templates_path']
+    if searx_settings['ui']['templates_path'] == '':
+        templates_path = configuration['searx']['path_to_settings'][:-len('settings.yml')] + '/templates'
+    available_themes = []
+    for filename in listdir(templates_path):
+        if filename != '__common__':
+            available_themes.append((filename, filename))
+    return available_themes
+
+
+@app.route('/ui')
+@login_required
+def ui():
+    locales = _setup_locales_to_display()
+    available_themes = _get_available_themes()
     return render_template('ui.html',
                            instance_name=searx_settings['general']['instance_name'],
                            locales=locales,
+                           available_themes=available_themes,
                            **searx_settings['ui'])
 
 
