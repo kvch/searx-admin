@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+{% block page %}
+
+<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+    <thead>
+        <tr>
+            <th class="mdl-data-table__cell--non-numeric">Engine name</th>
+            <th class="mdl-data-table__cell--non-numeric">Shortcut</th>
+            <th class="mdl-data-table__cell--non-numeric">Enabled</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for engine in engines %}
+        <tr>
+            <td class="mdl-data-table__cell--non-numeric">{{ engine.name }}</td>
+            <td class="mdl-data-table__cell--non-numeric">!{{ engine.shortcut }}</td>
+            <td class="mdl-data-table__cell--non-numeric">
+                {% if not engine.disabled %}
+                <i class="material-icons">done</i>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

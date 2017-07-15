@@ -88,7 +88,10 @@ def ui():
 @app.route('/engines')
 @login_required
 def engines():
-    return 'engines'
+    return render_template('engines.html',
+                           instance_name=searx_settings['general']['instance_name'],
+                           engines=searx_settings['engines'])
+
 
 
 @app.route('/settings')
