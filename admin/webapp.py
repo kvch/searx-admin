@@ -133,13 +133,12 @@ def _save_searx_settings(settings):
         yaml.dump(searx_settings, config_file)
 
 
-@app.route('/save', methods=["POST"])
+@app.route('/save', methods=['POST'])
 @login_required
 def save():
     if request.form is None or 'section' not in request.form:
         return redirect(url_for('index'))
 
-    print(request.form)
     _save_searx_settings(request.form)
 
     return redirect(url_for(request.form['section']))
