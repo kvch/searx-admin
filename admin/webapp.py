@@ -1,7 +1,7 @@
 from os.path import isfile
 import yaml
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 from flask_mail import Mail
 from flask_security import Security, SQLAlchemySessionUserDatastore, login_required
 
@@ -45,7 +45,7 @@ def index():
 
 @app.route('/instance')
 @login_required
-def instance():
+def server():
     return render_template('server.html',
                            instance_name=searx_settings['general']['instance_name'],
                            debug=searx_settings['general']['debug'],
@@ -74,7 +74,7 @@ def search():
 
 @app.route('/ui')
 @login_required
-def user_interface():
+def ui():
     locales = []
     for key, val in searx_settings['locales'].items():
         locales.append((key, val))
@@ -95,6 +95,32 @@ def engines():
 @login_required
 def settings():
     return 'settings'
+
+
+def _save_searx_settings(settings):
+    if settings['section'] == 'server':
+        searx_settings['general']['debug'] = 'debug' in settings
+        searx_settings['general']['instance_name'] = settings['instance_name']
+        for key, _ in searx_settings['server'].items():
+            searx_settings['server'][key] = settings[key]
+    else:
+        for key, _ in searx_settings[settings['section']].items():
+            searx_settings[settings['section']][key] = settings[key]
+
+    with open(configuration['searx']['path_to_settings'], 'w') as config_file:
+        yaml.dump(searx_settings, config_file)
+
+
+@app.route('/save', methods=["POST"])
+@login_required
+def save():
+    if request.form is None or 'section' not in request.form:
+        return redirect(url_for('index'))
+
+    print(request.form)
+    _save_searx_settings(request.form)
+
+    return redirect(url_for(request.form['section']))
 
 
 def run():
