@@ -1,5 +1,6 @@
 from os.path import isfile
 
+
 from flask import Flask, render_template, request, redirect, url_for
 from flask_mail import Mail
 from flask_security import Security, SQLAlchemySessionUserDatastore, login_required
@@ -24,7 +25,7 @@ app.config['MAIL_PASSWORD'] = configuration['mail']['password']
 mail = Mail(app)
 user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 security = Security(app, user_datastore)
-instance = Searx('/home/n/p/searx', configuration['searx']['path_to_settings'])
+instance = Searx(configuration['searx']['root'], configuration['searx']['path_to_settings'])
 
 
 @app.before_first_request
