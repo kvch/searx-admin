@@ -1,12 +1,15 @@
 import yaml
-from os import listdir, system
+import subprocess
+from os import listdir
+from signal import SIGHUP
 
 
 class Searx(object):
     settings_path = ''
     settings = None
     root_folder = None
-    pid = None
+    process = None
+    running = False
     safe_search_options = [('0', 'None'),
                            ('1', 'Moderate'),
                            ('2', 'Strict')]
@@ -19,6 +22,7 @@ class Searx(object):
 
     def __init__(self, root_folder, settings_path):
         self.root_folder = root_folder
+        self.settings_path = settings_path
         with open(settings_path) as config_file:
             self.settings = yaml.load(config_file)
 
@@ -32,7 +36,7 @@ class Searx(object):
             for key, _ in self.settings[settings['section']].items():
                 self.settings[settings['section']][key] = new_settings[key]
 
-        with open(self.settings_path) as config_file:
+        with open(self.settings_path, 'w') as config_file:
             yaml.dump(self.settings, config_file)
 
     def available_themes(self):
@@ -46,11 +50,24 @@ class Searx(object):
         return available_themes
 
     def reload(self):
-        pass
+        if self.running:
+            self.process.send_signal(SIGHUP)
 
     def start(self):
-        pass
+        if self.running:
+            return
+
+        # TODO pass virtual env as a parameter
+        uwsgi_cmd = ['uwsgi', '--plugin', 'python', '-w', 'searx.webapp', '--master',
+                     '--processes', '2', '-H', 'venv', '--enable-threads', '--lazy-apps',
+                     '--http-socket', '{}:{}'.format(self.settings['server']['bind_address'],
+                                                     self.settings['server']['port'])]
+
+        self.process = subprocess.Popen(uwsgi_cmd, cwd=self.root_folder)
+        self.running = True
 
     def stop(self):
-        pass
-
+        if self.running and self.process:
+            self.process.kill()
+            self.running = False
+            self.process = None

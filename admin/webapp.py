@@ -102,6 +102,27 @@ def save():
     return redirect(url_for(request.form['section']))
 
 
+@app.route('/start')
+@login_required
+def start_instance():
+    instance.start()
+    return render_template('manage.html')
+
+
+@app.route('/stop')
+@login_required
+def stop_instance():
+    instance.stop()
+    return render_template('manage.html')
+
+
+@app.route('/reload')
+@login_required
+def reload_instance():
+    instance.reload()
+    return render_template('manage.html')
+
+
 def run():
     app.run(port=configuration['app']['port'],
             debug=configuration['app']['debug'])
