@@ -5,10 +5,10 @@ from signal import SIGHUP
 
 
 class Searx(object):
+    _process = None
     settings_path = ''
     settings = None
     root_folder = None
-    process = None
     running = False
     safe_search_options = [('0', 'None'),
                            ('1', 'Moderate'),
@@ -27,14 +27,15 @@ class Searx(object):
             self.settings = yaml.load(config_file)
 
     def save_settings(self, new_settings):
+        # TODO make it beautiful
         if new_settings['section'] == 'server':
-            self.settings['general']['debug'] = 'debug' in new_settings
-            self.settings['general']['instance_name'] = new_settings['instance_name']
+            self.settings['general']['debug'] = new_settings.get('debug', False)
+            self.settings['general']['instance_name'] = new_settings.get('instance_name', '')
             for key, _ in self.settings['server'].items():
-                self.settings['server'][key] = new_settings[key]
+                self.settings['server'][key] = new_settings.get(key, False)
         else:
-            for key, _ in self.settings[settings['section']].items():
-                self.settings[settings['section']][key] = new_settings[key]
+            for key, _ in self.settings[new_settings['section']].items():
+                self.settings[new_settings['section']][key] = new_settings.get(key, '')
 
         with open(self.settings_path, 'w') as config_file:
             yaml.dump(self.settings, config_file)
@@ -51,7 +52,7 @@ class Searx(object):
 
     def reload(self):
         if self.running:
-            self.process.send_signal(SIGHUP)
+            self._process.send_signal(SIGHUP)
 
     def start(self):
         if self.running:
@@ -63,11 +64,11 @@ class Searx(object):
                      '--http-socket', '{}:{}'.format(self.settings['server']['bind_address'],
                                                      self.settings['server']['port'])]
 
-        self.process = subprocess.Popen(uwsgi_cmd, cwd=self.root_folder)
+        self._process = subprocess.Popen(uwsgi_cmd, cwd=self.root_folder)
         self.running = True
 
     def stop(self):
-        if self.running and self.process:
-            self.process.kill()
+        if self.running and self._process:
+            self._process.kill()
             self.running = False
-            self.process = None
+            self._process = None
