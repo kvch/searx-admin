@@ -97,7 +97,8 @@ def save():
     if request.form is None or 'section' not in request.form:
         return redirect(url_for('index'))
 
-    instance.save(request.form)
+    instance.save_settings(request.form)
+    instance.reload()
 
     return redirect(url_for(request.form['section']))
 
