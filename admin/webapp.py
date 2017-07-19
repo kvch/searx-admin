@@ -39,8 +39,7 @@ def _create_db_if_missing():
 @app.route('/')
 @login_required
 def index():
-    return render_template('manage.html',
-                           instance_name=instance.settings['general']['instance_name'])
+    return render_template('manage.html')
 
 
 @app.route('/instance')
@@ -56,7 +55,6 @@ def server():
 @login_required
 def search():
     return render_template('search.html',
-                           instance_name=instance.settings['general']['instance_name'],
                            safe_search_options=instance.safe_search_options,
                            autocomplete_options=instance.autocomplete_options,
                            **instance.settings['search'])
@@ -76,7 +74,6 @@ def ui():
     locales = _setup_locales_to_display()
     available_themes = instance.available_themes()
     return render_template('ui.html',
-                           instance_name=instance.settings['general']['instance_name'],
                            locales=locales,
                            available_themes=available_themes,
                            **instance.settings['ui'])
@@ -85,9 +82,7 @@ def ui():
 @app.route('/engines')
 @login_required
 def engines():
-    return render_template('engines.html',
-                           instance_name=instance.settings['general']['instance_name'],
-                           engines=instance.settings['engines'])
+    return render_template('engines.html', engines=instance.settings['engines'])
 
 
 @app.route('/settings')
