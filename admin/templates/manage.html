@@ -9,10 +9,18 @@
 {% endif %}
 
 {% if instance_running %}
-<a href="{{ url_for('stop_instance') }}"><i class="material-icons">stop</i></a>
-<a href="{{ url_for('reload_instance') }}"><i class="material-icons">replay</i></a>
+<a href="{{ url_for('stop_instance') }}"><button class="mdl-button mdl-js-button mdl-button--primary"><i class="material-icons">stop</i> STOP</button></a>
+<a href="{{ url_for('reload_instance') }}">
+    <button class="mdl-button mdl-js-button mdl-button--primary">
+        <i class="material-icons">replay</i> RELOAD
+    </button>
+</a>
 {% else %}
-<a href="{{ url_for('start_instance') }}"><i class="material-icons">play_arrow</i></a>
+<a href="{{ url_for('start_instance') }}">
+    <button class="mdl-button mdl-js-button mdl-button--primary">
+        <i class="material-icons">play_arrow</i> START
+    </button>
+</a>
 {% endif %}
 </div>
 
