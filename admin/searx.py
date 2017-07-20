@@ -6,9 +6,10 @@ from signal import SIGHUP
 
 class Searx(object):
     _process = None
+    root_folder = ''
     settings_path = ''
     settings = None
-    root_folder = None
+    virtualenv_name = ''
     running = False
     safe_search_options = [('0', 'None'),
                            ('1', 'Moderate'),
@@ -20,10 +21,11 @@ class Searx(object):
                             ('google', 'Google'),
                             ('dbpedia', 'DBPedia')]
 
-    def __init__(self, root_folder, settings_path):
-        self.root_folder = root_folder
-        self.settings_path = settings_path
-        with open(settings_path) as config_file:
+    def __init__(self, root, path_to_settings, virtualenv_name):
+        self.root_folder = root
+        self.settings_path = path_to_settings
+        self.virtualenv_name = virtualenv_name
+        with open(path_to_settings) as config_file:
             self.settings = yaml.load(config_file)
 
     def save_settings(self, new_settings):
@@ -59,8 +61,8 @@ class Searx(object):
             return
 
         # TODO pass virtual env as a parameter
-        uwsgi_cmd = ['uwsgi', '--plugin', 'python', '-w', 'searx.webapp', '--master',
-                     '--processes', '2', '-H', 'venv', '--enable-threads', '--lazy-apps',
+        uwsgi_cmd = ['uwsgi', '--plugin', 'python', '--module', 'searx.webapp', '--master',
+                     '--processes', '2', '--venv', self.virtualenv_name, '--enable-threads', '--lazy-apps',
                      '--http-socket', '{}:{}'.format(self.settings['server']['bind_address'],
                                                      self.settings['server']['port'])]
 

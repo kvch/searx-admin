@@ -25,7 +25,7 @@ app.config['MAIL_PASSWORD'] = configuration['mail']['password']
 mail = Mail(app)
 user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 security = Security(app, user_datastore)
-instance = Searx(configuration['searx']['root'], configuration['searx']['path_to_settings'])
+instance = Searx(**configuration['searx'])
 
 
 @app.before_first_request
