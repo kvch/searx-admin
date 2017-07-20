@@ -39,7 +39,10 @@ def _create_db_if_missing():
 @app.route('/')
 @login_required
 def index():
-    return render_template('manage.html')
+    return render_template('manage.html',
+                           instance_running=instance.running,
+                           bind_address=instance.settings['server']['bind_address'],
+                           port=instance.settings['server']['port'])
 
 
 @app.route('/instance')
@@ -107,21 +110,33 @@ def save():
 @login_required
 def start_instance():
     instance.start()
-    return render_template('manage.html')
+    return render_template('manage.html',
+                           instance_running=instance.running,
+                           bind_address=instance.settings['server']['bind_address'],
+                           port=instance.settings['server']['port'])
+
 
 
 @app.route('/stop')
 @login_required
 def stop_instance():
     instance.stop()
-    return render_template('manage.html')
+    return render_template('manage.html',
+                           instance_running=instance.running,
+                           bind_address=instance.settings['server']['bind_address'],
+                           port=instance.settings['server']['port'])
+
 
 
 @app.route('/reload')
 @login_required
 def reload_instance():
     instance.reload()
-    return render_template('manage.html')
+    return render_template('manage.html',
+                           instance_running=instance.running,
+                           bind_address=instance.settings['server']['bind_address'],
+                           port=instance.settings['server']['port'])
+
 
 
 def run():

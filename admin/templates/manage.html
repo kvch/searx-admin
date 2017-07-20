@@ -1,9 +1,19 @@
 {% extends "index.html" %}
 {% block page %}
 
-<p>Instance info...</p>
+<div style="margin: 2.5rem 5rem;">
+{% if instance_running %}
+<p>Your searx instance is running at {{ bind_address }}:{{ port }}</p>
+{% else %}
+<p>No searx instance is running.</p>
+{% endif %}
 
-<i class="material-icons">play_arrow</i>
-<i class="material-icons">stop</i>
-<i class="material-icons">replay</i>
+{% if instance_running %}
+<a href="{{ url_for('stop_instance') }}"><i class="material-icons">stop</i></a>
+<a href="{{ url_for('reload_instance') }}"><i class="material-icons">replay</i></a>
+{% else %}
+<a href="{{ url_for('start_instance') }}"><i class="material-icons">play_arrow</i></a>
+{% endif %}
+</div>
+
 {% endblock %}
