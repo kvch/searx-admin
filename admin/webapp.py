@@ -82,6 +82,12 @@ def ui():
                            **instance.settings['ui'])
 
 
+@app.route('/outgoing')
+@login_required
+def outgoing():
+    return render_template('outgoing.html', **instance.settings['outgoing'])
+
+
 @app.route('/engines')
 @login_required
 def engines():

@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+{% from "macros.html" import text_input, numeric_input, submit %}
+{% block page %}
+
+<form method="POST" action="{{ url_for('save') }}" id="outgoing">
+    <input type="hidden" name="section" value="outgoing">
+    {{ numeric_input('Request timeout', 'request_timeout', request_timeout) }}
+    {{ text_input('Suffix of user agent', 'useragent_suffix', useragent_suffix) }}
+    {{ numeric_input('Number of pool connections', 'pool_connections', pool_connections) }}
+    {{ numeric_input('Number of connections by pool', 'pool_maxsize', pool_maxsize) }}
+    {{ submit() }}
+</form>
+
+{% endblock %}
