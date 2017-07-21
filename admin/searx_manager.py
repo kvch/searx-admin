@@ -1,13 +1,11 @@
 import yaml
 import subprocess
 from os import listdir
-
-
 from signal import SIGHUP
+from sys import path
 
 from config import configuration
 
-from sys import path
 path.append(configuration['searx']['root'])
 
 from searx.engines import load_engines
@@ -53,7 +51,7 @@ class Searx(object):
                 self.settings[new_settings['section']][key] = new_settings.get(key, '')
 
         with open(self.settings_path, 'w') as config_file:
-            yaml.dump(self.settings, config_file)
+            yaml.dump(self.settings, config_file, default_flow_style=False)
 
     def available_themes(self):
         templates_path = self.settings['ui']['templates_path']
