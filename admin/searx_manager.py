@@ -17,7 +17,7 @@ class Searx(object):
     root_folder = ''
     settings_path = ''
     settings = None
-    virtualenv_name = ''
+    uwsgi_extra_args = []
     running = False
     languages = language_codes
     # TODO import these from searx (preferences)
@@ -31,10 +31,10 @@ class Searx(object):
                             ('google', 'Google'),
                             ('dbpedia', 'DBPedia')]
 
-    def __init__(self, root, path_to_settings, virtualenv_name):
+    def __init__(self, root, path_to_settings, uwsgi_extra_args):
         self.root_folder = root
         self.settings_path = path_to_settings
-        self.virtualenv_name = virtualenv_name
+        self.uwsgi_extra_args = uwsgi_extra_args
         with open(path_to_settings) as config_file:
             self.settings = yaml.load(config_file)
             self.engines = load_engines(self.settings['engines'])
@@ -72,9 +72,10 @@ class Searx(object):
             return
 
         uwsgi_cmd = ['uwsgi', '--plugin', 'python', '--module', 'searx.webapp', '--master',
-                     '--processes', '2', '--venv', self.virtualenv_name, '--enable-threads', '--lazy-apps',
+                     '--processes', '2', '--enable-threads', '--lazy-apps',
                      '--http-socket', '{}:{}'.format(self.settings['server']['bind_address'],
                                                      self.settings['server']['port'])]
+        uwsgi_cmd.extend(self.uwsgi_extra_args)
 
         self._process = subprocess.Popen(uwsgi_cmd, cwd=self.root_folder)
         self.running = True

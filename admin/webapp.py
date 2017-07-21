@@ -30,7 +30,9 @@ instance = Searx(**configuration['searx'])
 
 @app.before_first_request
 def _create_db_if_missing():
-    if not isfile(configuration['app']['sqlite_path'][len('sqlite////'):]):
+    try:
+        User.query.first()
+    except:
         init_db()
         user_datastore.create_user(email='admin@localhost', password='password')
         db_session.commit()

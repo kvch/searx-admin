@@ -2,7 +2,7 @@ app:
     debug: True
     port: 8889
     secretkey: 'my-dirty-secret'
-    sqlite_path: 'sqlite:////tmp/users.db'
+    database_connection_string: 'sqlite:////tmp/users.db'
 
 mail:
     server: 'smtp.localhost'
@@ -14,4 +14,4 @@ mail:
 searx:
     path_to_settings: '/path/to/searx/searx/settings.yml'
     root: '/path/to/searx'
-    virtualenv_name: 'env'
+    uwsgi_extra_args: ['--venv', 'env']
