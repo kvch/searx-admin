@@ -1,5 +1,5 @@
+import sys
 from os.path import isfile
-
 
 from flask import Flask, render_template, request, redirect, url_for
 from flask_mail import Mail
@@ -8,7 +8,12 @@ from flask_security import Security, SQLAlchemySessionUserDatastore, login_requi
 from config import configuration
 from database import db_session, init_db
 from model import User, Role
-from searx import Searx
+from searx_manager import Searx
+
+from sys import path
+path.append(configuration['searx']['root'])
+
+from searx.languages import language_codes as languages
 
 
 app = Flask(__name__)
@@ -60,6 +65,7 @@ def search():
     return render_template('search.html',
                            safe_search_options=instance.safe_search_options,
                            autocomplete_options=instance.autocomplete_options,
+                           languages=languages,
                            **instance.settings['search'])
 
 

@@ -6,7 +6,25 @@
     <input type="hidden" name="section" value="search">
     {{ dropdown('Safe search', 'safe_search', safe_search_options, safe_search) }}
     {{ dropdown('Autocomplete', 'autocomplete', autocomplete_options, autocomplete) }}
-    {{ dropdown('Language', 'language', [], language) }}
+
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--4-col mdl-cell--middle">
+            Language:
+        </div>
+        <div class="mdl-cell mdl-cell--8-col mdl-cell--middle">
+            <div class="mdl-selectfield">
+                <select class="browser-default" name="language">
+                    <option value="all" {% if current == 'all' %}selected="selected"{% endif %}>Default language</option>
+                    {% for language_id, language_name, country_name, english_name  in languages | sort(attribute=1) %}
+                    <option value="{{ language_id }}" {% if current == language_id %}selected="selected"{% endif %}>
+                    {{ language_name }} {% if country_name %}({{ country_name }}) {% endif %}- {{ language_id }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+
 	{{ submit() }}
 </form>
 {% endblock %}
