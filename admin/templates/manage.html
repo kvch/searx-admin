@@ -1,27 +1,4 @@
 {% extends "index.html" %}
 {% block page %}
-
-<div style="margin: 2.5rem 5rem;">
-{% if instance_running %}
-<p>Your searx instance is running at {{ bind_address }}:{{ port }}</p>
-{% else %}
-<p>No searx instance is running.</p>
-{% endif %}
-
-{% if instance_running %}
-<a href="{{ url_for('stop_instance') }}"><button class="mdl-button mdl-js-button mdl-button--primary"><i class="material-icons">stop</i> STOP</button></a>
-<a href="{{ url_for('reload_instance') }}">
-    <button class="mdl-button mdl-js-button mdl-button--primary">
-        <i class="material-icons">replay</i> RELOAD
-    </button>
-</a>
-{% else %}
-<a href="{{ url_for('start_instance') }}">
-    <button class="mdl-button mdl-js-button mdl-button--primary">
-        <i class="material-icons">play_arrow</i> START
-    </button>
-</a>
-{% endif %}
-</div>
-
+<h3>Welcome to searx admin!</h3>
 {% endblock %}

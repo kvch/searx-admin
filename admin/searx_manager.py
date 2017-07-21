@@ -18,7 +18,6 @@ class Searx(object):
     settings_path = ''
     settings = None
     uwsgi_extra_args = []
-    running = False
     languages = language_codes
     # TODO import these from searx (preferences)
     safe_search_options = [('0', 'None'),
@@ -64,11 +63,18 @@ class Searx(object):
         return available_themes
 
     def reload(self):
-        if self.running:
+        if self.is_running():
             self._process.send_signal(SIGHUP)
 
+    def is_running(self):
+        if self._process is None:
+            return False
+
+        self._process.poll()
+        return self._process.returncode is None
+
     def start(self):
-        if self.running:
+        if self.is_running():
             return
 
         uwsgi_cmd = ['uwsgi', '--plugin', 'python', '--module', 'searx.webapp', '--master',
@@ -78,10 +84,11 @@ class Searx(object):
         uwsgi_cmd.extend(self.uwsgi_extra_args)
 
         self._process = subprocess.Popen(uwsgi_cmd, cwd=self.root_folder)
-        self.running = True
 
     def stop(self):
-        if self.running and self._process:
+        if self.is_running():
+            self._process.terminate()
+        if self.is_running():
             self._process.kill()
-            self.running = False
+        if not self.is_running():
             self._process = None

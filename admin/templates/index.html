@@ -8,6 +8,22 @@
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
     <header class="mdl-layout__header">
         <div class="mdl-layout__header-row">
+        {% if instance.is_running() %}
+            <div>Your searx instance is running at {{ instance.settings['server']['bind_address'] }}:{{ instance.settings['server']['port'] }}</div>
+            <a href="{{ url_for('stop_instance') }}"><button class="mdl-button mdl-js-button mdl-button--primary"><i class="material-icons">stop</i> STOP</button></a>
+            <a href="{{ url_for('reload_instance') }}">
+                <button class="mdl-button mdl-js-button menubutton">
+                    <i class="material-icons">replay</i> RELOAD
+                </button>
+            </a>
+        {% else %}
+            <div>No searx instance is running.</div>
+            <a href="{{ url_for('start_instance') }}">
+                <button class="mdl-button mdl-js-button menubutton">
+                    <i class="material-icons">play_arrow</i> START
+                </button>
+            </a>
+        {% endif %}
             <div class="mdl-layout-spacer"></div>
             <a href="{{ url_for_security('logout') }}">
                 <label class="mdl-button mdl-js-button mdl-button--icon">

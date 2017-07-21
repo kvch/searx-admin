@@ -28,6 +28,11 @@ security = Security(app, user_datastore)
 instance = Searx(**configuration['searx'])
 
 
+def render(template_name, **kwargs):
+    kwargs['instance'] = instance
+    return render_template(template_name, **kwargs)
+
+
 @app.before_first_request
 def _create_db_if_missing():
     try:
@@ -41,36 +46,35 @@ def _create_db_if_missing():
 @app.route('/')
 @login_required
 def index():
-    return render_template('manage.html',
-                           instance_running=instance.running,
-                           bind_address=instance.settings['server']['bind_address'],
-                           port=instance.settings['server']['port'])
+    return render('manage.html',
+                  bind_address=instance.settings['server']['bind_address'],
+                  port=instance.settings['server']['port'])
 
 
 @app.route('/instance')
 @login_required
 def server():
-    return render_template('server.html',
-                           instance_name=instance.settings['general']['instance_name'],
-                           debug=instance.settings['general']['debug'],
-                           **instance.settings['server'])
+    return render('server.html',
+                  instance_name=instance.settings['general']['instance_name'],
+                  debug=instance.settings['general']['debug'],
+                  **instance.settings['server'])
 
 
 @app.route('/search')
 @login_required
 def search():
-    return render_template('search.html',
-                           safe_search_options=instance.safe_search_options,
-                           autocomplete_options=instance.autocomplete_options,
-                           languages=instance.languages,
-                           **instance.settings['search'])
+    return render('search.html',
+                  safe_search_options=instance.safe_search_options,
+                  autocomplete_options=instance.autocomplete_options,
+                  languages=instance.languages,
+                  **instance.settings['search'])
 
 
 def _setup_locales_to_display():
     locales = []
     for key, val in instance.settings['locales'].items():
         locales.append((key, val))
-    locales.append(('', 'Default'))
+        locales.append(('', 'Default'))
     return locales
 
 
@@ -79,22 +83,22 @@ def _setup_locales_to_display():
 def ui():
     locales = _setup_locales_to_display()
     available_themes = instance.available_themes()
-    return render_template('ui.html',
-                           locales=locales,
-                           available_themes=available_themes,
-                           **instance.settings['ui'])
+    return render('ui.html',
+                  locales=locales,
+                  available_themes=available_themes,
+                  **instance.settings['ui'])
 
 
 @app.route('/outgoing')
 @login_required
 def outgoing():
-    return render_template('outgoing.html', **instance.settings['outgoing'])
+    return render('outgoing.html', **instance.settings['outgoing'])
 
 
 @app.route('/engines')
 @login_required
 def engines():
-    return render_template('engines.html', engines=instance.engines)
+    return render('engines.html', engines=instance.engines)
 
 
 @app.route('/settings')
@@ -119,10 +123,7 @@ def save():
 @login_required
 def start_instance():
     instance.start()
-    return render_template('manage.html',
-                           instance_running=instance.running,
-                           bind_address=instance.settings['server']['bind_address'],
-                           port=instance.settings['server']['port'])
+    return redirect(url_for('index'))
 
 
 
@@ -130,10 +131,7 @@ def start_instance():
 @login_required
 def stop_instance():
     instance.stop()
-    return render_template('manage.html',
-                           instance_running=instance.running,
-                           bind_address=instance.settings['server']['bind_address'],
-                           port=instance.settings['server']['port'])
+    return redirect(url_for('index'))
 
 
 
@@ -141,10 +139,7 @@ def stop_instance():
 @login_required
 def reload_instance():
     instance.reload()
-    return render_template('manage.html',
-                           instance_running=instance.running,
-                           bind_address=instance.settings['server']['bind_address'],
-                           port=instance.settings['server']['port'])
+    return redirect(url_for('index'))
 
 
 
