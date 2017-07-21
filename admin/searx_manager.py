@@ -1,7 +1,17 @@
 import yaml
 import subprocess
 from os import listdir
+
+
 from signal import SIGHUP
+
+from config import configuration
+
+from sys import path
+path.append(configuration['searx']['root'])
+
+from searx.engines import load_engines
+from searx.languages import language_codes
 
 
 class Searx(object):
@@ -11,6 +21,8 @@ class Searx(object):
     settings = None
     virtualenv_name = ''
     running = False
+    languages = language_codes
+    # TODO import these from searx (preferences)
     safe_search_options = [('0', 'None'),
                            ('1', 'Moderate'),
                            ('2', 'Strict')]
@@ -27,6 +39,7 @@ class Searx(object):
         self.virtualenv_name = virtualenv_name
         with open(path_to_settings) as config_file:
             self.settings = yaml.load(config_file)
+            self.engines = load_engines(self.settings['engines'])
 
     def save_settings(self, new_settings):
         # TODO make it beautiful

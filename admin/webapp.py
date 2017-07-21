@@ -10,11 +10,6 @@ from database import db_session, init_db
 from model import User, Role
 from searx_manager import Searx
 
-from sys import path
-path.append(configuration['searx']['root'])
-
-from searx.languages import language_codes as languages
-
 
 app = Flask(__name__)
 app.secret_key = configuration['app']['secretkey']
@@ -65,7 +60,7 @@ def search():
     return render_template('search.html',
                            safe_search_options=instance.safe_search_options,
                            autocomplete_options=instance.autocomplete_options,
-                           languages=languages,
+                           languages=instance.languages,
                            **instance.settings['search'])
 
 
@@ -97,7 +92,7 @@ def outgoing():
 @app.route('/engines')
 @login_required
 def engines():
-    return render_template('engines.html', engines=instance.settings['engines'])
+    return render_template('engines.html', engines=instance.engines)
 
 
 @app.route('/settings')
