@@ -1,28 +1,29 @@
 {% extends "index.html" %}
 {% block page %}
 
-<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-    <thead>
-        <tr>
-            <th class="mdl-data-table__cell--non-numeric">Engine name</th>
-            <th class="mdl-data-table__cell--non-numeric">Shortcut</th>
-            <th class="mdl-data-table__cell--non-numeric">Categories</th>
-            <th class="mdl-data-table__cell--non-numeric">Enabled</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for engine in engines.values() %}
-        <tr>
-            <td class="mdl-data-table__cell--non-numeric">{{ engine.name }}</td>
-            <td class="mdl-data-table__cell--non-numeric">!{{ engine.shortcut }}</td>
-            <td class="mdl-data-table__cell--non-numeric">{{ ', '.join(engine.categories) }}</td>
-            <td class="mdl-data-table__cell--non-numeric">
-                {% if not engine.disabled %}
-                <i class="material-icons">done</i>
-                {% endif %}
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+{% for engine in engines.values()|sort(attribute='name') %}
+<div id="engines-container">
+<div class="mdl-card mdl-shadow--2dp">
+    <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">{{ engine.name }}</h2>
+    </div>
+    <div class="mdl-card__supporting-text">
+        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="{{ engine.name }}-state">
+            <input type="checkbox" id="{{ engine.name }}-state" class="mdl-switch__input" {% if not engine.disabled %}checked{% endif %}>
+                <span class="mdl-switch__label"></span>
+        </label>
+        <p></p>
+        <div>Shortcut: !{{ engine.shortcut }}</div>
+        <div>Categories: {{ engine.categories|join(', ') }}</div>
+        <div>Timeout: {{ engine.timeout }}</div>
+    </div>
+    <div class="mdl-card__menu">
+        <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+            <i class="material-icons">mode_edit</i>
+        </button>
+    </div>
+</div>
+</div>
+{% endfor %}
+
 {% endblock %}
