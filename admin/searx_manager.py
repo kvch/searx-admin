@@ -11,6 +11,7 @@ path.append(configuration['searx']['root'])
 
 from searx.engines import load_engines
 from searx.languages import language_codes
+from searx import autocomplete
 
 
 class Searx(object):
@@ -20,16 +21,11 @@ class Searx(object):
     settings = None
     uwsgi_extra_args = []
     languages = language_codes
-    # TODO import these from searx (preferences)
     safe_search_options = [('0', 'None'),
                            ('1', 'Moderate'),
                            ('2', 'Strict')]
-    autocomplete_options = [('', 'None'),
-                            ('wikipedia', 'Wikipedia'),
-                            ('startpage', 'StartPage'),
-                            ('duckduckgo', 'DuckDuckGo'),
-                            ('google', 'Google'),
-                            ('dbpedia', 'DBPedia')]
+    autocomplete_options = zip(list(autocomplete.backends.keys()) + [''],
+                               list(autocomplete.backends.keys()) + ['-'])
 
     def __init__(self, root, path_to_settings, uwsgi_extra_args):
         self.root_folder = root
