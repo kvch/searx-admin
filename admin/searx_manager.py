@@ -38,16 +38,28 @@ class Searx(object):
             self.settings = yaml.load(config_file)
             self.engines = load_engines(self.settings['engines'])
 
+    def _save(self, new_settings):
+        for key, _ in self.settings[new_settings['section']].items():
+            self.settings[new_settings['section']][key] = new_settings.get(key, '')
+
+    def _save_server_and_general_settings(self, new_settings):
+        self.settings['general']['debug'] = new_settings.get('debug', False)
+        self.settings['general']['instance_name'] = new_settings.get('instance_name', '')
+        for key, _ in self.settings['server'].items():
+            self.settings['server'][key] = new_settings.get(key, False)
+
+    def _save_outgoing_settings(self, new_settings):
+        self._save(new_settings)
+        self.settings['outgoing']['source_ips'] = new_settings['source_ips'].split(', ')
+
     def save_settings(self, new_settings):
         # TODO make it beautiful
         if new_settings['section'] == 'server':
-            self.settings['general']['debug'] = new_settings.get('debug', False)
-            self.settings['general']['instance_name'] = new_settings.get('instance_name', '')
-            for key, _ in self.settings['server'].items():
-                self.settings['server'][key] = new_settings.get(key, False)
+            self._save_server_and_general_settings(new_settings)
+        elif new_settings['section'] == 'outgoing':
+            self._save_outgoing_settings(new_settings)
         else:
-            for key, _ in self.settings[new_settings['section']].items():
-                self.settings[new_settings['section']][key] = new_settings.get(key, '')
+            self._save(new_settings)
 
         with open(self.settings_path, 'w') as config_file:
             yaml.dump(self.settings, config_file, default_flow_style=False)

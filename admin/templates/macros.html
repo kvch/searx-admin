@@ -41,6 +41,20 @@
 </div>
 {% endmacro %}
 
+{% macro list_input(label, id, value) -%}
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--4-col mdl-cell--middle">
+        {{ label }}:
+    </div>
+    <div class="mdl-cell mdl-cell--8-col mdl-cell--middle">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" name="{{ id }}" value="{{ value|join(', ') }}">
+              <label class="mdl-textfield__label" for="{{ id }}"></label>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
 {% macro dropdown(label, id, possible_values, current) -%}
 <div class="mdl-grid">
     <div class="mdl-cell mdl-cell--4-col mdl-cell--middle">
