@@ -3,13 +3,15 @@
 
 <script>
 function selectEngine() {
-    var filter, engines, engineName, i;
+    var filter, engines, engineName, engineCategory, i;
     filter = document.getElementById("engine-search").value.toUpperCase();
     engines = document.getElementsByClassName("engine-container");
 
     for (i = 0; i < engines.length; i++) {
         engineName = engines[i].getElementsByTagName("h2")[0];
-        if (engineName.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        engineCategory = engines[i].getElementsByClassName("engine-category")[0];
+        if (engineName.innerHTML.toUpperCase().indexOf(filter) > -1
+                || engineCategory.innerHTML.toUpperCase().indexOf(filter) > -1) {
             engines[i].style.display = "";
         } else {
             engines[i].style.display = "none";
@@ -19,7 +21,7 @@ function selectEngine() {
 </script>
 
 <div class="mdl-grid">
-    <input id="engine-search" class="mdl-textfield__input" type="text" placeholder="Select engine by name" onkeyup="selectEngine()">
+    <input id="engine-search" class="mdl-textfield__input" type="text" placeholder="Select engine by name or category" oninput="selectEngine()">
 </div>
 
 <div class="mdl-grid">
@@ -36,7 +38,7 @@ function selectEngine() {
                 </label>
                 <p></p>
                 <div>Shortcut: !{{ engine.shortcut }}</div>
-                <div>Categories: {{ engine.categories|join(', ') }}</div>
+                <div class="engine-category">Categories: {{ engine.categories|join(', ') }}</div>
                 <div>Timeout: {{ engine.timeout }}</div>
             </div>
             <div class="mdl-card__menu">
