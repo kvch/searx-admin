@@ -1,6 +1,7 @@
 import yaml
 import subprocess
 from os import listdir
+from os.path import isdir
 from signal import SIGHUP
 from sys import path
 
@@ -69,6 +70,9 @@ class Searx(object):
         if self.settings['ui']['templates_path'] == '':
             templates_path = self.root_folder + '/searx/templates'
         available_themes = []
+        if not isdir(templates_path):
+            # TODO log error
+            return None
         for filename in listdir(templates_path):
             if filename != '__common__':
                 available_themes.append((filename, filename))

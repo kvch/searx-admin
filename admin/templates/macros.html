@@ -63,9 +63,11 @@
     <div class="mdl-cell mdl-cell--8-col mdl-cell--middle">
 		<div class="mdl-selectfield">
             <select class="browser-default" name="{{ id }}">
+                {% if possible_values %}
 				{% for value, name in possible_values %}
                 <option value="{{ value }}" {% if current == value %}selected="selected"{% endif %}>{{ name }}</option>
 				{% endfor %}
+                {% endif %}
 			</select>
 		</div>
     </div>
