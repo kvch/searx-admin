@@ -104,7 +104,19 @@ def engines():
 @app.route('/engine/<engine_name>/edit')
 @login_required
 def edit_engine(engine_name):
-    return render('edit_engine.html', engine=instance.engines[engine_name])
+    skip_attrs = ('name', 'category', 'timeout', 'continuous_errors', 'disabled', 'shortcut', 'paging')
+    engine = instance.engines[engine_name]
+    attrs = []
+    type_map = {str: 'str', float: 'float', int: 'float', bool: 'bool'}
+    for attr in dir(engine):
+        if attr.startswith('_') or attr in skip_attrs:
+            continue
+        attr_value = getattr(engine, attr)
+        attr_type = type(attr_value)
+        if attr_type not in (str, int, float, bool):
+            continue
+        attrs.append((attr, attr_value, type_map[attr_type]))
+    return render('edit_engine.html', engine=engine, engine_attrs=attrs, isinstance=isinstance)
 
 
 @app.route('/settings')
