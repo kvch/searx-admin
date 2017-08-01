@@ -101,6 +101,12 @@ def engines():
     return render('engines.html', engines=instance.engines)
 
 
+@app.route('/engine/<engine_name>/edit')
+@login_required
+def edit_engine(engine_name):
+    return render('edit_engine.html', engine=instance.engines[engine_name])
+
+
 @app.route('/settings')
 @login_required
 def settings():

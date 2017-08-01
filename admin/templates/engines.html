@@ -42,9 +42,7 @@ function selectEngine() {
                 <div>Timeout: {{ engine.timeout }}</div>
             </div>
             <div class="mdl-card__menu">
-                <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                    <i class="material-icons">mode_edit</i>
-                </button>
+                    <a href="{{ url_for("edit_engine", engine_name=engine.name) }}"><i class="material-icons">mode_edit</i></a>
             </div>
         </div>
     </div>
