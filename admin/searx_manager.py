@@ -1,7 +1,7 @@
 import yaml
 import subprocess
 from os import listdir
-from os.path import isdir
+from os.path import isdir, abspath, join, dirname
 from signal import SIGHUP
 from sys import path
 
@@ -12,6 +12,10 @@ path.append(configuration['searx']['root'])
 from searx.engines import load_engines
 from searx.languages import language_codes
 from searx import autocomplete
+
+BASE_DIR = abspath(dirname(__file__))
+REFERENCE_SETTINGS_PATH = join(BASE_DIR, 'reference_settings.yml')
+EDITABLE_SETTINGS_PATH = join(BASE_DIR, 'settings.yml')
 
 
 class Searx(object):
@@ -27,11 +31,10 @@ class Searx(object):
     autocomplete_options = zip(list(autocomplete.backends.keys()) + [''],
                                list(autocomplete.backends.keys()) + ['-'])
 
-    def __init__(self, root, path_to_settings, uwsgi_extra_args):
+    def __init__(self, root, uwsgi_extra_args):
         self.root_folder = root
-        self.settings_path = path_to_settings
         self.uwsgi_extra_args = uwsgi_extra_args
-        with open(path_to_settings) as config_file:
+        with open(REFERENCE_SETTINGS_PATH) as config_file:
             self.settings = yaml.load(config_file)
             self.engines = load_engines(self.settings['engines'])
 
@@ -58,7 +61,7 @@ class Searx(object):
         else:
             self._save(new_settings)
 
-        with open(self.settings_path, 'w') as config_file:
+        with open(EDITABLE_SETTINGS_PATH, 'w') as config_file:
             yaml.dump(self.settings, config_file, default_flow_style=False)
 
     def available_themes(self):
@@ -95,7 +98,11 @@ class Searx(object):
                                                      self.settings['server']['port'])]
         uwsgi_cmd.extend(self.uwsgi_extra_args)
 
-        self._process = subprocess.Popen(uwsgi_cmd, cwd=self.root_folder)
+        self._process = subprocess.Popen(
+            uwsgi_cmd,
+            cwd=self.root_folder,
+            env={'SEARX_SETTINGS_PATH': EDITABLE_SETTINGS_PATH},
+        )
 
     def stop(self):
         if self.is_running():

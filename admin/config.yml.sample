@@ -12,6 +12,5 @@ mail:
     password: 'password'
 
 searx:
-    path_to_settings: '/path/to/searx/searx/settings.yml'
     root: '/path/to/searx'
     uwsgi_extra_args: ['--venv', 'env']
