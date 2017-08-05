@@ -1,1 +1,3 @@
 admin/config.yml
+admin/searx_generated_settings.yml
+admin/searx_uwsgi.ini

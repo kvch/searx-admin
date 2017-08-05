@@ -1,7 +1,7 @@
 import yaml
 import subprocess
 from os import listdir
-from os.path import isdir, abspath, join, dirname
+from os.path import isfile, isdir, abspath, join, dirname
 from signal import SIGHUP
 from sys import path
 
@@ -13,9 +13,34 @@ from searx.engines import load_engines
 from searx.languages import language_codes
 from searx import autocomplete
 
+
 BASE_DIR = abspath(dirname(__file__))
 REFERENCE_SETTINGS_PATH = join(BASE_DIR, 'reference_settings.yml')
-EDITABLE_SETTINGS_PATH = join(BASE_DIR, 'settings.yml')
+EDITABLE_SETTINGS_PATH = join(BASE_DIR, 'searx_generated_settings.yml')
+UWSGI_CONFIG_PATH = join(BASE_DIR, 'searx_uwsgi.ini')
+UWSGI_INI_TPL = '''
+[uwsgi]
+# disable logging for privacy
+#disable-logging = true
+
+# Number of workers (usually CPU count)
+workers = 2
+
+http-socket = {http_socket}
+socket = 127.0.0.1:7777
+
+master = true
+plugin = python
+lazy-apps = true
+enable-threads = true
+
+# Module to import
+module = searx.webapp
+
+base = {searx_dir}
+pythonpath = {searx_dir}
+chdir = {searx_dir}/searx
+'''
 
 
 class Searx(object):
@@ -47,6 +72,18 @@ class Searx(object):
         self.settings['general']['instance_name'] = new_settings.get('instance_name', '')
         for key, _ in self.settings['server'].items():
             self.settings['server'][key] = new_settings.get(key, False)
+        self._save_uwsgi_ini()
+
+    def _save_uwsgi_ini(self):
+        # save uwsgi.ini too
+        with open(UWSGI_CONFIG_PATH, 'w') as outfile:
+            outfile.write(UWSGI_INI_TPL.format(
+                http_socket = '{}:{}'.format(
+                    self.settings['server']['bind_address'],
+                    self.settings['server']['port'],
+                ),
+                searx_dir = self.root_folder,
+            ))
 
     def _save_outgoing_settings(self, new_settings):
         self._save(new_settings)
@@ -92,10 +129,10 @@ class Searx(object):
         if self.is_running():
             return
 
-        uwsgi_cmd = ['uwsgi', '--plugin', 'python', '--module', 'searx.webapp', '--master',
-                     '--processes', '2', '--enable-threads', '--lazy-apps',
-                     '--http-socket', '{}:{}'.format(self.settings['server']['bind_address'],
-                                                     self.settings['server']['port'])]
+        if not isfile(UWSGI_CONFIG_PATH):
+            self._save_uwsgi_ini()
+
+        uwsgi_cmd = ['uwsgi', '--ini', UWSGI_CONFIG_PATH]
         uwsgi_cmd.extend(self.uwsgi_extra_args)
 
         self._process = subprocess.Popen(
