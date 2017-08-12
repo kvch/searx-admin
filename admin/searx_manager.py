@@ -148,3 +148,9 @@ class Searx(object):
             self._process.kill()
         if not self.is_running():
             self._process = None
+
+    def __enter__(self):
+        self.start()
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.stop()

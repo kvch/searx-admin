@@ -1,5 +1,4 @@
 app:
-    debug: True
     port: 8889
     secretkey: 'my-dirty-secret'
     database_connection_string: 'sqlite:////tmp/users.db'

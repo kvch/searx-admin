@@ -162,8 +162,9 @@ def reload_instance():
 
 
 def run():
-    app.run(port=configuration['app']['port'],
-            debug=configuration['app']['debug'])
+    with instance:
+        app.run(port=configuration['app']['port'],
+                debug=False)
 
 
 if __name__ == '__main__':
