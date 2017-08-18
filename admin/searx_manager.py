@@ -60,8 +60,12 @@ class Searx(object):
         self.root_folder = root
         self.uwsgi_extra_args = uwsgi_extra_args
         with open(REFERENCE_SETTINGS_PATH) as config_file:
-            self.settings = yaml.load(config_file)
+            config = config_file.read()
+            self.settings = yaml.load(config)
             self.engines = load_engines(self.settings['engines'])
+            if not isfile(EDITABLE_SETTINGS_PATH):
+                with open(EDITABLE_SETTINGS_PATH, 'w') as outfile:
+                    outfile.write(config)
 
     def _save(self, new_settings):
         for key, _ in self.settings[new_settings['section']].items():
