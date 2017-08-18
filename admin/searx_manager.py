@@ -63,18 +63,33 @@ class Searx(object):
             config = config_file.read()
             self.settings = yaml.load(config)
             self.engines = load_engines(self.settings['engines'])
-            if not isfile(EDITABLE_SETTINGS_PATH):
+            if isfile(EDITABLE_SETTINGS_PATH):
+                with open(EDITABLE_SETTINGS_PATH) as config_file2:
+                    self._merge_settings(yaml.load(config_file2.read()))
+            else:
                 with open(EDITABLE_SETTINGS_PATH, 'w') as outfile:
                     outfile.write(config)
 
+    def _merge_settings(self, new_settings):
+        for k, s in new_settings.items():
+            if k == 'engines':
+                continue
+            for kk, c in s.items():
+                self.settings[k][kk] = c
+
+        editable_engines = {e['name']: e for e in new_settings['engines']}
+        for i, e in enumerate(self.settings['engines']):
+            if e['name'] in editable_engines:
+                self.settings['engines'][i] = editable_engines[e['name']]
+
     def _save(self, new_settings):
-        for key, _ in self.settings[new_settings['section']].items():
+        for key in self.settings[new_settings['section']]:
             self.settings[new_settings['section']][key] = new_settings.get(key, '')
 
     def _save_server_and_general_settings(self, new_settings):
         self.settings['general']['debug'] = new_settings.get('debug', False)
         self.settings['general']['instance_name'] = new_settings.get('instance_name', '')
-        for key, _ in self.settings['server'].items():
+        for key in self.settings['server']:
             self.settings['server'][key] = new_settings.get(key, False)
         self._save_uwsgi_ini()
 
