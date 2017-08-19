@@ -101,10 +101,10 @@ def engines():
     return render('engines.html', engines=instance.engines)
 
 
-@app.route('/engine/<engine_name>/edit')
+@app.route('/engine/<engine_name>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_engine(engine_name):
-    skip_attrs = ('name', 'category', 'timeout', 'continuous_errors', 'disabled', 'shortcut', 'paging')
+    skip_attrs = ('name', 'continuous_errors', 'paging', 'suspend_end_time')
     engine = instance.engines[engine_name]
     attrs = []
     type_map = {str: 'str', float: 'float', int: 'float', bool: 'bool'}
@@ -113,9 +113,18 @@ def edit_engine(engine_name):
             continue
         attr_value = getattr(engine, attr)
         attr_type = type(attr_value)
-        if attr_type not in (str, int, float, bool):
+        if attr_type not in (str, int, float, bool, unicode):
             continue
+        if request.method == 'POST':
+            try:
+                attr_value = attr_type(request.form[attr])
+                setattr(engine, attr, attr_value)
+            except:
+                print("attr not found or type mismatched", attr, attr_type, request.form.get(attr))
         attrs.append((attr, attr_value, type_map[attr_type]))
+    if request.method == 'POST':
+        instance.save_settings({'section': 'engine', 'engine': engine})
+        instance.reload()
     return render('edit_engine.html', engine=engine, engine_attrs=attrs, isinstance=isinstance)
 
 

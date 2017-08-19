@@ -108,12 +108,23 @@ class Searx(object):
         self._save(new_settings)
         self.settings['outgoing']['source_ips'] = new_settings['source_ips'].split(', ')
 
+    def _save_engine(self, engine):
+        for e2 in self.settings['engines']:
+            if e2['name'] == engine.name:
+                for attr in dir(engine):
+                    if attr in e2:
+                        e2[attr] = getattr(engine, attr)
+                print("engine settings saved")
+                break
+
     def save_settings(self, new_settings):
         # TODO make it beautiful
         if new_settings['section'] == 'server':
             self._save_server_and_general_settings(new_settings)
         elif new_settings['section'] == 'outgoing':
             self._save_outgoing_settings(new_settings)
+        if new_settings['section'] == 'engine':
+            self._save_engine(new_settings['engine'])
         else:
             self._save(new_settings)
 

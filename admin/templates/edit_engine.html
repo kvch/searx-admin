@@ -6,17 +6,19 @@
     <div class="engine-container">
         <h2 class="mdl-card__title-text">{{ engine.name }} edit</h2>
     </div>
-    {{ text_input('Engine name', 'name', engine.name) }}
+    <!--
     {{ text_input('Shortcut', 'shortcut', engine.shortcut) }}
     {{ text_input('Categories', 'categories', engine.categories|join(',') ) }}
     {{ numeric_input('Timeout', 'timeout', engine.timeout) }}
+    {{ switch('Disabled', 'disabled', engine.disabled) }}
+    -->
     {% for key, value, type in engine_attrs %}
         {% if type == 'str' %}
-            {{ text_input(key.capitalize(), key, value) }}
+            {{ text_input(key.capitalize().replace('_', ' '), key, value) }}
         {% elif type == 'float' %}
-            {{ numeric_input(key.capitalize(), key, value) }}
+            {{ numeric_input(key.capitalize().replace('_', ' '), key, value) }}
         {% elif type == 'bool' %}
-            {{ switch(key.capitalize(), key, value) }}
+            {{ switch(key.capitalize().replace('_', ' '), key, value) }}
         {% endif %}
     {% endfor %}
     {{ submit() }}
