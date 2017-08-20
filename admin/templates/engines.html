@@ -21,7 +21,7 @@ function selectEngine() {
 </script>
 
 <div class="mdl-grid">
-    <input id="engine-search" class="mdl-textfield__input" type="text" placeholder="Select engine by name or category" oninput="selectEngine()">
+    <input id="engine-search" class="mdl-textfield__input" type="text" placeholder="Filter engine by name or category" oninput="selectEngine()">
 </div>
 
 <div class="mdl-grid">
@@ -38,7 +38,7 @@ function selectEngine() {
                 </label>
                 <p></p>
                 <div>Shortcut: !{{ engine.shortcut }}</div>
-                <div class="engine-category">Categories: {{ engine.categories|join(', ') }}</div>
+                <div>Categories: <span class="engine-category">{{ engine.categories|join(', ') }}</span></div>
                 <div>Timeout: {{ engine.timeout }}</div>
             </div>
             <div class="mdl-card__menu">

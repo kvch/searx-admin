@@ -37,13 +37,11 @@
         </div>
     </header>
     <div class="mdl-layout__drawer">
-        <span class="mdl-layout-title">searx admin</span>
+        <span class="mdl-layout-title"><a href="{{ url_for('index') }}">Searx Admin</a></span>
         <nav class="mdl-navigation">
-            <a class="mdl-navigation__link" href="{{ url_for('server') }}">Instance</a>
-            <a class="mdl-navigation__link" href="{{ url_for('search') }}">Search</a>
-            <a class="mdl-navigation__link" href="{{ url_for('ui') }}">User interface</a>
-            <a class="mdl-navigation__link" href="{{ url_for('outgoing') }}">Outgoing requests</a>
-            <a class="mdl-navigation__link" href="{{ url_for('engines') }}">Engines</a>
+          {% for endpoint, menu_name in menu_items.items() %}
+          <a class="mdl-navigation__link {% if request.url_rule.endpoint == endpoint %}mdl-navigation__link--current{% endif %}" href="{{ url_for(endpoint) }}">{{ menu_name }}</a>
+          {% endfor %}
         </nav>
     </div>
     <main class="mdl-layout__content">

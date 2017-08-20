@@ -33,6 +33,11 @@ select:focus {
     }
 }
 
+#engine-search {
+    padding: 10px;
+    border: 1px solid #999999;
+}
+
 .menubutton, .menubutton {
     color: #DDDDFF;
 }
@@ -51,4 +56,12 @@ select:focus {
 }
 .user-event-error {
     font-weight: bold;
+}
+.page-content {
+    padding: 0 2em;
+}
+
+.mdl-layout-title > a {
+    color: #606060;
+    text-decoration: none;
 }
