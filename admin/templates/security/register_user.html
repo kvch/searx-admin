@@ -3,20 +3,20 @@
 
 <div class="user-event-card-wide mdl-card mdl-shadow--2dp">
   <div class="mdl-card__title">
-      <h2 class="mdl-card__title-text">{{ _('Login') }}</h2>
+      <h2 class="mdl-card__title-text">{{ _('Register') }}</h2>
   </div>
   <div class="mdl-card__supporting-text">
-    <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
-    {{ login_user_form.hidden_tag() }}
-    {% if login_user_form.email.errors %}
-      {% for error in login_user_form.email.errors %}
+    <form action="{{ url_for_security('register') }}" method="POST" name="register_user_form">
+    {{ register_user_form.hidden_tag() }}
+    {% if register_user_form.email.errors %}
+      {% for error in register_user_form.email.errors %}
       <div class="user-event-error mdl-color-text--accent">
             <label class="mdl-button mdl-button--icon"><i class="material-icons">error</i></label>{{ error }}
       </div>
       {% endfor %}
     {% endif %}
-    {% if login_user_form.password.errors %}
-      {% for error in login_user_form.password.errors %}
+    {% if register_user_form.password.errors %}
+      {% for error in register_user_form.password.errors %}
       <div class="user-event-error mdl-color-text--accent">
             <label class="mdl-button mdl-button--icon"><i class="material-icons">error</i></label>{{ error }}
       </div>
@@ -30,13 +30,13 @@
         <label class="mdl-textfield__label" for="password">Password</label>
         <input class="mdl-textfield__input" id="password" name="password" type="password" value="">
     </div>
-    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="remember">
-        <input class="mdl-checkbox__input" id="remember" name="remember" type="checkbox" value="y">
-        <span class="mdl-checkbox__label">Remember Me</span>
-    </label>
-    <p><input id="next" name="next" type="hidden" value="/"></p>
-    <p><input class="mdl-button mdl-js-button mdl-button--raised mdl-button--primary" id="submit" name="submit" type="submit" value="Login"></p>
+    <div class="mdl-textfield mdl-js-textfield">
+        <label class="mdl-textfield__label" for="password_confirm">Retype password</label>
+        <input class="mdl-textfield__input" id="password_confirm" name="password_confirm" type="password" value="">
+    </div>
+    <p><input class="mdl-button mdl-js-button mdl-button--raised mdl-button--primary" id="submit" name="submit" type="submit" value="Register"></p>
     </form>
   </div>
 </div>
 {% endblock %}
+

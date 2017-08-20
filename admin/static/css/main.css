@@ -42,3 +42,13 @@ select:focus {
     margin-left: 1.0rem;
     margin-top: 1.0rem;
 }
+
+.user-event-card-wide.mdl-card {
+    width: 30.0rem;
+    margin: auto;
+    margin-top: 10.0rem;
+    padding: 2.0rem;
+}
+.user-event-error {
+    font-weight: bold;
+}
