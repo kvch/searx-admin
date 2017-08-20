@@ -27,13 +27,13 @@ is_user_missing = True
 
 def render(template_name, **kwargs):
     kwargs['instance'] = instance
-    kwargs['menu_items'] = {
-        'server': 'Instance',
-        'search': 'Search',
-        'ui': 'User interface',
-        'outgoing': 'Outgoing requests',
-        'engines': 'Engines',
-    }
+    kwargs['menu_items'] = (
+        ('server', 'Instance'),
+        ('search', 'Search'),
+        ('ui', 'User interface'),
+        ('outgoing', 'Outgoing requests'),
+        ('engines', 'Engines'),
+    )
     return render_template(template_name, **kwargs)
 
 

@@ -39,7 +39,7 @@
     <div class="mdl-layout__drawer">
         <span class="mdl-layout-title"><a href="{{ url_for('index') }}">Searx Admin</a></span>
         <nav class="mdl-navigation">
-          {% for endpoint, menu_name in menu_items.items() %}
+          {% for endpoint, menu_name in menu_items %}
           <a class="mdl-navigation__link {% if request.url_rule.endpoint == endpoint %}mdl-navigation__link--current{% endif %}" href="{{ url_for(endpoint) }}">{{ menu_name }}</a>
           {% endfor %}
         </nav>
