@@ -153,13 +153,18 @@ def start_instance():
     return redirect(url_for('index'))
 
 
-
 @app.route('/stop')
 @login_required
 def stop_instance():
     instance.stop()
     return redirect(url_for('index'))
 
+
+@app.route('/restore_defaults')
+@login_required
+def restore_defaults():
+    instance.restore_defaults()
+    return redirect(url_for('index'))
 
 
 @app.route('/reload')
@@ -169,11 +174,9 @@ def reload_instance():
     return redirect(url_for('index'))
 
 
-
 def run():
     with instance:
-        app.run(port=configuration['app']['port'],
-                debug=False)
+        app.run(port=configuration['app']['port'], debug=False)
 
 
 if __name__ == '__main__':

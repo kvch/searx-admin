@@ -3,6 +3,7 @@ import subprocess
 from os import listdir
 from os.path import isfile, isdir, abspath, join, dirname
 from signal import SIGHUP
+from shutil import copy
 from sys import path
 
 from config import configuration
@@ -152,9 +153,15 @@ class Searx(object):
                 available_themes.append((filename, filename))
         return available_themes
 
+    def restore_defaults(self):
+        copy(REFERENCE_SETTINGS_PATH, EDITABLE_SETTINGS_PATH)
+        self.reload()
+
     def reload(self):
         if self.is_running():
             self._process.send_signal(SIGHUP)
+        else:
+            self.start()
 
     def is_running(self):
         if self._process is None:

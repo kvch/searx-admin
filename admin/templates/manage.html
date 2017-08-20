@@ -1,4 +1,10 @@
 {% extends "index.html" %}
 {% block page %}
 <h3>Welcome to searx admin!</h3>
+
+<a href="{{ url_for('restore_defaults') }}">
+    <label class="mdl-button mdl-js-button">
+        <i class="material-icons">restore</i> restore default settings
+    </label>
+</a>
 {% endblock %}

@@ -9,7 +9,7 @@
     <header class="mdl-layout__header">
         <div class="mdl-layout__header-row">
         {% if instance.is_running() %}
-            <div>Your searx instance is running at {{ instance.settings['server']['bind_address'] }}:{{ instance.settings['server']['port'] }}</div>
+            <div><a href="http://{{ instance.settings['server']['bind_address'] }}:{{ instance.settings['server']['port'] }}/">Searx</a> is running</div>
             <a href="{{ url_for('stop_instance') }}">
               <button class="mdl-button mdl-js-button menubutton">
                 <i class="material-icons">stop</i> STOP
@@ -21,7 +21,7 @@
                 </button>
             </a>
         {% else %}
-            <div>No searx instance is running.</div>
+            <div>Searx has been stopped<div>
             <a href="{{ url_for('start_instance') }}">
                 <button class="mdl-button mdl-js-button menubutton">
                     <i class="material-icons">play_arrow</i> START
