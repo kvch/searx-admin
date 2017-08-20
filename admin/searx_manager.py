@@ -84,7 +84,15 @@ class Searx(object):
 
     def _save(self, new_settings):
         for key in self.settings[new_settings['section']]:
-            self.settings[new_settings['section']][key] = new_settings.get(key, '')
+            new_val = new_settings.get(key, '')
+            val_type = type(self.settings[new_settings['section']][key])
+            if val_type != type(new_val):
+                try:
+                    new_val = val_type(new_val)
+                except:
+                    print("Failed to parse settings attribute", section, '->', val_name)
+                    continue
+            self.settings[new_settings['section']][key] = new_val
 
     def _save_server_and_general_settings(self, new_settings):
         self.settings['general']['debug'] = 'debug' in new_settings
