@@ -40,7 +40,13 @@ def render(template_name, **kwargs):
 @app.before_request
 def _create_user_if_missing():
     global is_user_missing
-    if is_user_missing and request.path != url_for('security.register'):
+    accessible_paths = [
+            url_for('security.register'),
+            url_for('static', filename='css/main.css'),
+            url_for('static', filename='css/material.min.css'),
+            url_for('static', filename='js/material.min.js'),
+    ]
+    if is_user_missing and request.path not in accessible_paths:
         return redirect(url_for('security.register'))
 
 
