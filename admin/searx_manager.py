@@ -87,7 +87,7 @@ class Searx(object):
             self.settings[new_settings['section']][key] = new_settings.get(key, '')
 
     def _save_server_and_general_settings(self, new_settings):
-        self.settings['general']['debug'] = new_settings.get('debug', False)
+        self.settings['general']['debug'] = 'debug' in new_settings
         self.settings['general']['instance_name'] = new_settings.get('instance_name', '')
         for key in self.settings['server']:
             self.settings['server'][key] = new_settings.get(key, False)
