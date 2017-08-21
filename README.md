@@ -8,6 +8,9 @@ A web based management interface for searx.
 
 Searx-admin depends on `git` and `uwsgi` tools and implemented in python.
 
+Please make sure that dependencies of searx are installed in the same virtualenv or on the
+same host searx admin is ran.
+
 ```
 virtualenv venv
 source venv/bin/activate
