@@ -28,6 +28,11 @@
                 </button>
             </a>
         {% endif %}
+            <a href="{{ url_for('update') }}">
+                <button class="mdl-button mdl-js-button menubutton">
+                    <i class="material-icons">update</i> UPDATE
+                </button>
+            </a>
             <div class="mdl-layout-spacer"></div>
             <a href="{{ url_for_security('logout') }}">
                 <label class="mdl-button mdl-js-button mdl-button--icon">

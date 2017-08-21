@@ -187,6 +187,13 @@ def reload_instance():
     return redirect(url_for('index'))
 
 
+@app.route('/update')
+@login_required
+def update():
+    instance.update()
+    return redirect(url_for('index'))
+
+
 def _check_db():
     global is_user_missing
     try:

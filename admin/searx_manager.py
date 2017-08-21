@@ -6,6 +6,8 @@ from signal import SIGHUP
 from shutil import copy
 from sys import path
 
+from requests import get
+
 from config import configuration
 
 path.append(configuration['searx']['root'])
@@ -162,6 +164,21 @@ class Searx(object):
             self._process.send_signal(SIGHUP)
         else:
             self.start()
+
+    def update(self):
+        subprocess.Popen(
+            ['git', 'pull', 'origin', 'master'],
+            cwd=self.root_folder,
+        ).wait()
+        try:
+            new_reference_settings = get('https://raw.githubusercontent.com/kvch/searx-admin/master/admin/reference_settings.yml').text
+            if new_reference_settings:
+                with open(REFERENCE_SETTINGS_PATH, 'w') as outfile:
+                    outfile.write(new_reference_settings)
+        except:
+            print('Failed to fetch new references settings.yml')
+
+        self.restart()
 
     def is_running(self):
         if self._process is None:
