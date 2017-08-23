@@ -2,6 +2,14 @@
 
 A web based management interface for searx.
 
+![engineslist](docs/images/engineslist.png)
+
+## Features
+
+- Edit configuration
+- Update from remote repository
+- Manage process (start, stop, reload)
+
 ## Installation & usage
 
 ### Install dependencies
