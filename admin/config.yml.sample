@@ -3,13 +3,6 @@ app:
     secretkey: 'my-dirty-secret'
     database_connection_string: 'sqlite:////tmp/users.db'
 
-mail:
-    server: 'smtp.localhost'
-    port: 465
-    use_ssl: True
-    user: 'mail'
-    password: 'password'
-
 searx:
     root: '/path/to/searx'
     uwsgi_extra_args: ['--venv', 'env']
