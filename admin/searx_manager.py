@@ -174,11 +174,11 @@ class Searx(object):
             new_reference_settings = get('https://raw.githubusercontent.com/kvch/searx-admin/master/admin/reference_settings.yml').text
             if new_reference_settings:
                 with open(REFERENCE_SETTINGS_PATH, 'w') as outfile:
-                    outfile.write(new_reference_settings)
-        except:
-            print('Failed to fetch new references settings.yml')
+                    outfile.write(new_reference_settings.encode('utf-8'))
+        except Exception as e:
+            print('Failed to fetch new references settings.yml', e)
 
-        self.restart()
+        self.reload()
 
     def is_running(self):
         if self._process is None:
