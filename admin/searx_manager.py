@@ -64,11 +64,11 @@ class Searx(object):
         self.uwsgi_extra_args = uwsgi_extra_args
         with open(REFERENCE_SETTINGS_PATH) as config_file:
             config = config_file.read()
-            self.settings = yaml.load(config)
+            self.settings = yaml.safe_load(config)
             self.engines = load_engines(self.settings['engines'])
             if isfile(EDITABLE_SETTINGS_PATH):
                 with open(EDITABLE_SETTINGS_PATH) as config_file2:
-                    self._merge_settings(yaml.load(config_file2.read()))
+                    self._merge_settings(yaml.safe_load(config_file2.read()))
             else:
                 with open(EDITABLE_SETTINGS_PATH, 'w') as outfile:
                     outfile.write(config)
