@@ -85,7 +85,7 @@ def search():
 
 def _setup_locales_to_display():
     locales = []
-    for key, val in instance.settings['locales'].items():
+    for key, val in list(instance.settings['locales'].items()):
         locales.append((key, val))
         locales.append(('', 'Default'))
     return locales
@@ -126,14 +126,14 @@ def edit_engine(engine_name):
             continue
         attr_value = getattr(engine, attr)
         attr_type = type(attr_value)
-        if attr_type not in (str, int, float, bool, unicode):
+        if attr_type not in (str, int, float, bool, str):
             continue
         if request.method == 'POST':
             try:
                 attr_value = attr_type(request.form[attr])
                 setattr(engine, attr, attr_value)
             except:
-                print("attr not found or type mismatched", attr, attr_type, request.form.get(attr))
+                print(("attr not found or type mismatched", attr, attr_type, request.form.get(attr)))
         attrs.append((attr, attr_value, type_map[attr_type]))
     if request.method == 'POST':
         instance.save_settings({'section': 'engine', 'engine': engine})

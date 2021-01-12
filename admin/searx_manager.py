@@ -56,28 +56,28 @@ class Searx(object):
     safe_search_options = [('0', 'None'),
                            ('1', 'Moderate'),
                            ('2', 'Strict')]
-    autocomplete_options = zip(list(autocomplete.backends.keys()) + [''],
-                               list(autocomplete.backends.keys()) + ['-'])
+    autocomplete_options = list(zip(list(autocomplete.backends.keys()) + [''],
+                               list(autocomplete.backends.keys()) + ['-']))
 
     def __init__(self, root, uwsgi_extra_args):
         self.root_folder = root
         self.uwsgi_extra_args = uwsgi_extra_args
         with open(REFERENCE_SETTINGS_PATH) as config_file:
             config = config_file.read()
-            self.settings = yaml.load(config)
+            self.settings = yaml.safe_load(config)
             self.engines = load_engines(self.settings['engines'])
             if isfile(EDITABLE_SETTINGS_PATH):
                 with open(EDITABLE_SETTINGS_PATH) as config_file2:
-                    self._merge_settings(yaml.load(config_file2.read()))
+                    self._merge_settings(yaml.safe_load(config_file2.read()))
             else:
                 with open(EDITABLE_SETTINGS_PATH, 'w') as outfile:
                     outfile.write(config)
 
     def _merge_settings(self, new_settings):
-        for k, s in new_settings.items():
+        for k, s in list(new_settings.items()):
             if k == 'engines':
                 continue
-            for kk, c in s.items():
+            for kk, c in list(s.items()):
                 self.settings[k][kk] = c
 
         editable_engines = {e['name']: e for e in new_settings['engines']}
@@ -93,7 +93,7 @@ class Searx(object):
                 try:
                     new_val = val_type(new_val)
                 except:
-                    print("Failed to parse settings attribute", section, '->', val_name)
+                    print(("Failed to parse settings attribute", section, '->', val_name))
                     continue
             self.settings[new_settings['section']][key] = new_val
 
@@ -176,7 +176,7 @@ class Searx(object):
                 with open(REFERENCE_SETTINGS_PATH, 'w') as outfile:
                     outfile.write(new_reference_settings.encode('utf-8'))
         except Exception as e:
-            print('Failed to fetch new references settings.yml', e)
+            print(('Failed to fetch new references settings.yml', e))
 
         self.reload()
 
