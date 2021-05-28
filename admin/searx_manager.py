@@ -74,11 +74,14 @@ class Searx(object):
                     outfile.write(config)
 
     def _merge_settings(self, new_settings):
-        for k, s in new_settings.items():
+        for k, s in list(new_settings.items()):
             if k == 'engines':
                 continue
-            for kk, c in s.items():
-                self.settings[k][kk] = c
+            try:
+                for kk, c in list(s.items()):
+                    self.settings[k][kk] = c
+            except AttributeError:  # s is not a dictionary
+                self.settings[k] = s
 
         editable_engines = {e['name']: e for e in new_settings['engines']}
         for i, e in enumerate(self.settings['engines']):
