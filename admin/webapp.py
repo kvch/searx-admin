@@ -13,6 +13,8 @@ from searx_manager import Searx
 
 app = Flask(__name__)
 app.secret_key = configuration['app']['secretkey']
+from flask_babel import Babel
+Babel(app)
 
 app.config['SECURITY_PASSWORD_SALT'] = configuration['app']['secretkey']
 app.config['SECURITY_REGISTERABLE'] = True
